@@ -1,5 +1,11 @@
 #include <Uefi.h>
 #include <Library/UefiLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+#include  <Library/PrintLib.h>
+#include  <Protocol/LoadedImage.h>
+#include  <Protocol/SimpleFileSystem.h>
+#include  <Protocol/DiskIo2.h>
+#include  <Protocol/BlockIo.h>
 
 struct MemoryMap {
     UINTN buffer_size;
@@ -8,7 +14,7 @@ struct MemoryMap {
     UINTN map_key;
     UINTN descriptor_size;
     UINT32 descriptor_version;
-}
+};
 
 EFI_STATUS GetMemoryMap(struct MemoryMap* map) {
     if (map->buffer == NULL){
@@ -48,7 +54,7 @@ const CHAR16* GetMemoryTypeUnicode(EFI_MEMORY_TYPE type) {
 }
 
 EFI_STATUS SaveMemoryMap(struct MemoryMap* map, EFI_FILE_PROTOCOL* file){
-    CHER8 buf[256];
+    CHAR8 buf[256];
     UINTN len;
 
     CHAR8* header = 
@@ -61,9 +67,9 @@ EFI_STATUS SaveMemoryMap(struct MemoryMap* map, EFI_FILE_PROTOCOL* file){
     
     EFI_PHYSICAL_ADDRESS iter;
     int i;
-    for (iter = (EFI_PHYSICAL_ADDRESS)ap->buffer, i = 0;
+    for (iter = (EFI_PHYSICAL_ADDRESS)map->buffer, i = 0;
          iter < (EFI_PHYSICAL_ADDRESS)map->buffer + map->map_size;
-         iter += map_descriptor_size, i++) {
+         iter += map->descriptor_size, i++) {
        EFI_MEMORY_DESCRIPTOR* desc = (EFI_MEMORY_DESCRIPTOR*)iter;
        len = AsciiSPrint(
         buf, sizeof(buf),
@@ -99,7 +105,7 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root){
         NULL,
         EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
 
-    fs->OpenVolumes(fs, root);
+    fs->OpenVolume(fs, root);
 
     return EFI_SUCCESS;
 }
@@ -127,7 +133,7 @@ EFI_STATUS EFIAPI UefiMain(
   memmap_file->Close(memmap_file);
 
   Print(L"All done\n");
-  
+
   while(1);
   return EFI_SUCCESS; 
 }
