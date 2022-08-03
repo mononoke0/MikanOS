@@ -6,7 +6,7 @@
 #include  <Protocol/SimpleFileSystem.h>
 #include  <Protocol/DiskIo2.h>
 #include  <Protocol/BlockIo.h>
-#include <Guild/FileInfo.h>
+#include <Guid/FileInfo.h>
 
 struct MemoryMap {
     UINTN buffer_size;
