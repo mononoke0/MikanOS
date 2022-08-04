@@ -134,10 +134,11 @@ EFI_STATUS EFIAPI UefiMain(
   memmap_file->Close(memmap_file);
 
   EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
-  OpenGOP(L"Resolution: %ux%u, Pixel Format: %s, %u pixels/line\n",
+  OpenGOP(image_handle, &gop);
+  Print(L"Resolution: %ux%u, Pixel Format: %s, %u pixels/line\n",
   gop->Mode->Info->HorizontalResolution,
-  got->Mode->Info->VerticalResolution,
-  GetPixelFormatUnicode(got->Mode->Info->PixelFormat),
+  gop->Mode->Info->VerticalResolution,
+  GetPixelFormatUnicode(gop->Mode->Info->PixelFormat),
   gop->Mode->Info->PixelsPerScanLine
   );
   Print(L"Frame Buffer: 0x%01x, Size: %lu bytes\n",
