@@ -286,7 +286,7 @@ EFI_STATUS EFIAPI UefiMain(
   }
   Print(L"Kernel: 0x%0lx (%lu bytes)\n", kernel_base_addr, kernel_file_size);
 
-  EFI_STATUS status;
+  
   status = gBS->ExitBootServices(image_handle, memmap.map_key);
   if (EFI_ERROR(status)){
     status = GetMemoryMap(&memmap);
