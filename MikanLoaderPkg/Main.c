@@ -133,6 +133,24 @@ EFI_STATUS EFIAPI UefiMain(
   SaveMemoryMap(&memmap, memmap_file);
   memmap_file->Close(memmap_file);
 
+  EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
+  OpenGOP(L"Resolution: %ux%u, Pixel Format: %s, %u pixels/line\n",
+  gop->Mode->Info->HorizontalResolution,
+  got->Mode->Info->VerticalResolution,
+  GetPixelFormatUnicode(got->Mode->Info->PixelFormat),
+  gop->Mode->Info->PixelsPerScanLine
+  );
+  Print(L"Frame Buffer: 0x%01x, Size: %lu bytes\n",
+  gop->Mode->FrameBufferBase,
+  gop->Mode->FrameBufferBase + gop->Mode->FrameBufferSize,
+  gop->Mode->FrameBufferSize);
+  
+  UINT8* frame_buffer = (UINT8*)gop->Mode->FrameBufferBase;
+  for (UINTN i = 0; i < gop->Mode->FrameBufferSize; ++i) {
+    frame_buffer[i] = 255;
+  }
+
+
   EFI_FILE_PROTOCOL* kernel_file;
   root_dir->Open(
     root_dir, &kernel_file, L"\\kernel.elf",
