@@ -4,7 +4,7 @@
 
 struct PixelColor{
     uint8_t r, g, b;
-}
+};
 
 class PixelWriter {
     public:
