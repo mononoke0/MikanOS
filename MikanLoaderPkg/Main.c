@@ -315,7 +315,7 @@ EFI_STATUS EFIAPI UefiMain(
     case PixelRedGreenBlueReserved8BitPerColor:
       config.pixel_format = kPixelRGBResv8BitPerColor;
       break;
-    case PixelBlueGreenRedReserverd8BitPerColor:
+    case PixelBlueGreenRedReserved8BitPerColor:
       config.pixel_format = kPixelBGRResv8BitPerColor;
       break;
     default:
@@ -323,7 +323,7 @@ EFI_STATUS EFIAPI UefiMain(
       Halt();
   }
 
-  typedef void EntryPointType(UINT64, UINT64);
+  typedef void EntryPointType(const struct FrameBufferConfig*);
   EntryPointType* entry_point = (EntryPointType*)entry_addr;
   entry_point(&config);
 
