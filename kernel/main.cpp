@@ -71,7 +71,7 @@ void WriteAscii(PixelWriter& writer, int x, int y, char c, const PixelColor& col
         return;
     }
     for (int dy = 0; dy < 16; ++dy){
-        for (int dx = 0; dx < 8, ++dx){
+        for (int dx = 0; dx < 8; ++dx){
             if ((kFontA[dy] << dx) & 0x80u) {
                 writer.Write(x + dx, y + dy, color);
             }
@@ -114,7 +114,7 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config){
 
   WriteAscii(*pixel_writer, 50, 50, 'A', {0, 0, 0});
   WriteAscii(*pixel_writer, 58, 50, 'A', {0, 0, 0});
-  
+
   while (1) __asm__("hlt");
 
 }
